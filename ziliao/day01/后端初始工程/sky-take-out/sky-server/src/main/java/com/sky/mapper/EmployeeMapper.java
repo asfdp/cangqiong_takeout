@@ -1,11 +1,17 @@
 package com.sky.mapper;
 
+import com.github.pagehelper.Page;
 import com.sky.dto.EmployeeDTO;
+import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
 
 @Mapper
 public interface EmployeeMapper {
@@ -20,9 +26,28 @@ public interface EmployeeMapper {
 
 
     /**
-     * 员工注册
+     *
+     * @param employee
      */
+
     @Insert("insert into employee (id,name,username,password,phone,sex,id_number,status,create_time,update_time,create_user,update_user) values " +
-            "(#{id},#{username},#{username},#{password},#{phone},#{sex},#{idNumber},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser})")
+            "(#{id},#{name},#{username},#{password},#{phone},#{sex},#{idNumber},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser})")
     void register(Employee employee);
+
+
+    /**
+     *分页查询
+     * @param employeePageQueryDTO
+     * @return
+     */
+    Page<Employee> pageQuery(EmployeePageQueryDTO employeePageQueryDTO);
+
+    /**
+     * 员工状态改变
+     * @param status
+     * @param id
+     */
+
+    void update(Employee employee);
+
 }

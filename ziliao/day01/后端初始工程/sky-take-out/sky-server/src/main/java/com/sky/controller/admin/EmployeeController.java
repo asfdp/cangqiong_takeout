@@ -4,8 +4,10 @@ import com.sky.constant.JwtClaimsConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
+import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.properties.JwtProperties;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.EmployeeService;
 import com.sky.utils.JwtUtil;
@@ -14,10 +16,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +25,7 @@ import java.util.Map;
  * 员工管理
  */
 @RestController
-@RequestMapping("/admin/employee")
+//@RequestMapping("/admin/employee")
 @Slf4j
 @Api(tags = "员工相关接口")
 public class EmployeeController {
@@ -42,7 +41,7 @@ public class EmployeeController {
      * @param employeeLoginDTO
      * @return
      */
-    @PostMapping("/login")
+    @PostMapping("/admin/employee/login")
     @ApiOperation(value="员工登录")
     public Result<EmployeeLoginVO> login(@RequestBody EmployeeLoginDTO employeeLoginDTO) {
         log.info("员工登录：{}", employeeLoginDTO);
@@ -64,6 +63,7 @@ public class EmployeeController {
                 .token(token)
                 .build();
 
+
         return Result.success(employeeLoginVO);
     }
 
@@ -72,7 +72,7 @@ public class EmployeeController {
      *
      * @return
      */
-    @PostMapping("/logout")
+    @PostMapping("/admin/employeev/logout")
     @ApiOperation(value="员工退出")
     public Result<String> logout() {
         return Result.success();
@@ -85,7 +85,7 @@ public class EmployeeController {
      * @param employeeDTO
      * @return
      */
-    @PostMapping()
+    @PostMapping("/admin/employee")
     @ApiOperation(value="员工注册")
     public Result<String> register(@RequestBody EmployeeDTO employeeDTO) {
         log.info("员工注册：{}", employeeDTO);
@@ -93,6 +93,28 @@ public class EmployeeController {
         return Result.success();
     }
 
+    @GetMapping("/admin/employee/page")
+    @ApiOperation(value = "员工分页查询")
+    public Result<PageResult> pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
+        //springMVC会自动将请求参数名与属性名一致的值传递进来
+        log.info("员工分页查询，请求参数：{}",employeePageQueryDTO);
+        PageResult pageResult = employeeService.pageQuery(employeePageQueryDTO);
 
+        return Result.success(pageResult);
+    }
+
+    /**
+     * 启用或禁用员工账号
+     * @param status
+     * @param id
+     * @return
+     */
+    @PostMapping("/admin/employee/status/{status}")
+    @ApiOperation(value = "员工状态管理")
+    public Result changeStatus(@PathVariable Integer status,Long id) {//此处status为路径参数，id为请求参数
+        log.info("启用或禁用员工账号：{}，{}",status,id);
+        employeeService.update(status, id);
+        return Result.success();
+    }
 
 }

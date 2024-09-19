@@ -1,17 +1,20 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.constant.PasswordConstant;
 import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
+import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
 import com.sky.properties.JwtProperties;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.EmployeeService;
 import com.sky.utils.JwtUtil;
@@ -25,12 +28,17 @@ import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Slf4j
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private EmployeeMapper employeeMapper;
+
+//    @Autowired
+//    private  PageResult pageResult;
 
 
     /**
@@ -93,4 +101,37 @@ public class EmployeeServiceImpl implements EmployeeService {
         return Result.success();
     }
 
+    /**
+     * 员工分页查询
+     * @param employeePageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
+        PageHelper.startPage(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
+        PageResult pageResult = new PageResult();
+        pageResult.setRecords(employeeMapper.pageQuery(employeePageQueryDTO));
+        pageResult.setTotal(pageResult.getRecords().size());
+        log.info("查询结果：{}",pageResult);
+        return pageResult;
+    }
+
+
+    /**
+     * 员工状态修改
+     * @param status
+     * @param id
+     * @return
+     */
+    @Override
+    public Result update(Integer status, Long id) {
+        //status = (status == StatusConstant.ENABLE ? StatusConstant.DISABLE :StatusConstant.ENABLE );
+        //用实体类来传递参数，复用数据更新方法
+        Employee employee=Employee.builder()
+                .status(status)
+                .id(id)
+                .build();
+        employeeMapper.update(employee);
+        return Result.success();
+    }
 }
