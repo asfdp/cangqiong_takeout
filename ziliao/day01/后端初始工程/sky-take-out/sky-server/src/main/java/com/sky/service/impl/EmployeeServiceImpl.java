@@ -88,14 +88,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee=new Employee();
         //使用spring框架中的bean属性拷贝，将DTO中的属性放到新生成的实体类中,补充其他属性
         BeanUtils.copyProperties(employeeDTO,employee);
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setCreateTime(LocalDateTime.now());
+//        employee.setUpdateTime(LocalDateTime.now());
         employee.setStatus(StatusConstant.ENABLE);
         //将默认密码常量通过MD5加密，设置默认密码
         employee.setPassword(DigestUtils.md5DigestAsHex(PasswordConstant.DEFAULT_PASSWORD.getBytes()));
-        Long empId = BaseContext.getCurrentId();//获取操作人员id
-        employee.setCreateUser(empId);
-        employee.setUpdateUser(empId);
+//        Long empId = BaseContext.getCurrentId();//获取操作人员id
+//        employee.setCreateUser(empId);
+//        employee.setUpdateUser(empId);
         employeeMapper.register(employee);
         log.info("新增员工：{}", employee);
         return Result.success();
@@ -124,7 +124,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @return
      */
     @Override
-    public Result update(Integer status, Long id) {
+    public Result changeStatus(Integer status, Long id) {
         //status = (status == StatusConstant.ENABLE ? StatusConstant.DISABLE :StatusConstant.ENABLE );
         //用实体类来传递参数，复用数据更新方法
         Employee employee=Employee.builder()
@@ -134,4 +134,23 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeMapper.update(employee);
         return Result.success();
     }
+
+    /**
+     * 根据id查询员工数据
+     * @param id
+     * @return employee
+     */
+    @Override
+    public Employee getById(Long id) {
+        Employee employee=employeeMapper.getById(id);
+        return employee;
+    }
+
+    @Override
+    public Result update(Employee employee) {
+        employeeMapper.update(employee);
+        return Result.success();
+    }
+
+
 }

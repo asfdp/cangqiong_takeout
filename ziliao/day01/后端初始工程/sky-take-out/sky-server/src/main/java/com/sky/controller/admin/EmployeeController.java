@@ -15,9 +15,12 @@ import com.sky.vo.EmployeeLoginVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,7 +84,6 @@ public class EmployeeController {
 
     /**
      * 员工注册
-     *
      * @param employeeDTO
      * @return
      */
@@ -113,8 +115,35 @@ public class EmployeeController {
     @ApiOperation(value = "员工状态管理")
     public Result changeStatus(@PathVariable Integer status,Long id) {//此处status为路径参数，id为请求参数
         log.info("启用或禁用员工账号：{}，{}",status,id);
-        employeeService.update(status, id);
+        employeeService.changeStatus(status, id);
         return Result.success();
     }
 
+    /**
+     * 个根据id查询员工信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/admin/employee/{id}")
+    @ApiOperation(value = "根据id查询员工信息")
+    public Result<Employee> getById(@PathVariable Long id) {
+        log.info("查询员工，id：{}",id);
+        Employee employee=employeeService.getById(id);
+        return Result.success(employee);
+    }
+
+
+    @PutMapping("/admin/employee")
+    @ApiOperation("编辑员工信息")
+    public Result update(@RequestBody EmployeeDTO employeeDTO) {
+        log.info("编辑员工信息：{}",employeeDTO);
+        //Employee employee = employeeService.getById(employeeDTO.getId());
+        Employee employee=new Employee();
+        BeanUtils.copyProperties(employeeDTO,employee);
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());
+        employeeService.update(employee);
+
+        return Result.success();
+    }
 }

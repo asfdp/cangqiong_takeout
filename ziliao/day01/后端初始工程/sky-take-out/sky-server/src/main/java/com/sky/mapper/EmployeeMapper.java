@@ -1,11 +1,14 @@
 package com.sky.mapper;
 
 import com.github.pagehelper.Page;
+import com.sky.annotations.AutoFill;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeePageQueryDTO;
 import com.sky.entity.Employee;
+import com.sky.enumeration.OperationType;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
+import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -26,12 +29,13 @@ public interface EmployeeMapper {
 
 
     /**
-     *
+     *插入员工
      * @param employee
      */
 
     @Insert("insert into employee (id,name,username,password,phone,sex,id_number,status,create_time,update_time,create_user,update_user) values " +
             "(#{id},#{name},#{username},#{password},#{phone},#{sex},#{idNumber},#{status},#{createTime},#{updateTime},#{createUser},#{updateUser})")
+    @AutoFill(value = OperationType.INSERT)
     void register(Employee employee);
 
 
@@ -44,10 +48,17 @@ public interface EmployeeMapper {
 
     /**
      * 员工状态改变
-     * @param status
-     * @param id
+     * @param employee
      */
 
+    @AutoFill(value = OperationType.UPDATE)
     void update(Employee employee);
 
+
+    /**
+     * 根据id查询员工信息
+     * @param id
+     * @return
+     */
+    Employee getById(Long id);
 }

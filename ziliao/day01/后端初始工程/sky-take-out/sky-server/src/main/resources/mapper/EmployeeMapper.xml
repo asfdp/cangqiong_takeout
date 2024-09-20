@@ -6,13 +6,12 @@
     <select id="pageQuery" resultType="com.sky.entity.Employee">
     select * from employee
         <where>
-            <if test=" name !='' and name != null">
+            <if test="name != '' and name != null">
                 and name like concat('%',#{name},'%')
             </if>
         </where>
         order by create_time desc
     </select>
-
     <update id="update" parameterType="com.sky.entity.Employee">
         update employee
         <set>
@@ -35,13 +34,13 @@
                 sex=#{sex},
             </if>
             <if test="idNumber!=null">
-                id_number=#{id_number},
+                id_number=#{idNumber},
             </if>
             <if test="updateTime!=null">
-                update_time=#{update_time},
+                update_time=#{updateTime},
             </if>
             <if test="updateUser!=null">
-                update_user=#{update_user},
+                update_user=#{updateUser},
             </if>
             <if test="status!=null">
                 status=#{status},
@@ -49,4 +48,7 @@
         </set>
         where id=#{id}
     </update>
+    <select id="getById" resultType="com.sky.entity.Employee">
+        select * from employee where id=#{id}
+    </select>
 </mapper>
