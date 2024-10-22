@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.SetmealDishMapper">
+    <insert id="insert">
+        insert into setmeal_dish (id, setmeal_id, dish_id, name, price, copies)
+        values
+        <foreach collection="list" item="sd" separator=",">
+             (#{sd.id},#{sd.setmealId},#{sd.dishId},#{sd.name},#{sd.price},#{sd.copies})
+        </foreach>
+    </insert>
+<!--    <update id="update">-->
+<!--        update setmeal_dish-->
+<!--        <set>-->
+<!--            <if test="id!=null">-->
+<!--                id=#{id},-->
+<!--            </if>-->
+<!--            <if test="setmealId !=null">-->
+<!--                setmeal_id={#setmealId},-->
+<!--            </if>-->
+<!--            <if test=" dishId!=null">-->
+<!--                dish_id=#{dishId},-->
+<!--            </if>-->
+<!--            <if test="name !=null">-->
+<!--                name=#{name},-->
+<!--            </if>-->
+<!--            <if test="updateTime !=null">-->
+<!--                update_time=#{updateTime},-->
+<!--            </if>-->
+<!--            <if test="updateUser !=null">-->
+<!--                update_user=#{updateUser},-->
+<!--            </if>-->
+<!--        </set>-->
+<!--    </update>-->
+    <delete id="deleteBySetmealIds">
+        delete from setmeal_dish
+            <where>
+                setmeal_id in
+               <foreach collection="list" item="id" separator="," open="(" close=")">
+                   #{id}
+               </foreach>
+            </where>
+    </delete>
+    <select id="getSetmealIdsByDishIds" resultType="java.lang.Long">
+        select setmeal_id from setmeal_dish where dish_id in
+        <foreach collection="list" item="dishId" separator="," open="(" close=")">
+            #{dishId}
+        </foreach>
+    </select>
+    <select id="getSetmealDishBySetmealId" resultType="com.sky.entity.SetmealDish">
+        select * from setmeal_dish where setmeal_id=#{setmealId};
+    </select>
+
+
+</mapper>

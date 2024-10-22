@@ -10,6 +10,7 @@ import java.util.List;
 @Data
 public class DishDTO implements Serializable {
 
+    //菜品id
     private Long id;
     //菜品名称
     private String name;

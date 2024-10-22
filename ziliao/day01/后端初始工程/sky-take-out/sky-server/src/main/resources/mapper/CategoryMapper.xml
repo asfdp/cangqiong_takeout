@@ -41,12 +41,20 @@
         where id = #{id}
     </update>
 
-    <select id="list" resultType="Category">
+    <select id="list" resultType="com.sky.entity.Category">
         select * from category
         where status = 1
         <if test="type != null">
             and type = #{type}
         </if>
         order by sort asc,create_time desc
+    </select>
+    <select id="selectById" resultType="com.sky.entity.Category">
+        select * from category
+            <where>
+                <if test="id!= '' or id!= null">
+                    id=#{categoryId}
+                </if>
+            </where>
     </select>
 </mapper>

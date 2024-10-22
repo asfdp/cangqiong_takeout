@@ -6,3 +6,22 @@ sky:
     database: sky_take_out
     username: root
     password: root
+
+  wechat:
+    appid: wx972f30d6936b25ba
+    secret: 8bd8f4ed312d43fc9f8ecd3562b4233e
+
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+    database: 0
+
+#阿里云OSS配置（access key在环境变量中配置）
+aliyun:
+  oss:
+    accessKeyId: ''
+    accessKeySecret: ''
+    bucketName: 'nemo-tlias'
+    endpoint: 'oss-cn-chengdu.aliyuncs.com'
+

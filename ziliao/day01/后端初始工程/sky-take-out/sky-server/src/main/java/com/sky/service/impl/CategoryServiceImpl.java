@@ -129,4 +129,14 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> list(Integer type) {
         return categoryMapper.list(type);
     }
+
+
+    /**
+     * 根据id查询分类
+     * @param id
+     * @return
+     */
+    public Category selectById(Long id) {
+        return categoryMapper.selectById(id);
+    }
 }

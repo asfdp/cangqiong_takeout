@@ -29,7 +29,7 @@ public interface EmployeeMapper {
 
 
     /**
-     *插入员工
+     *新增员工
      * @param employee
      */
 
