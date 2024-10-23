@@ -9,7 +9,7 @@ sky:
 
   wechat:
     appid: wx972f30d6936b25ba
-    secret: 8bd8f4ed312d43fc9f8ecd3562b4233e
+    secret: c9b1d18db22b949b4d90132df81638a7
 
   redis:
     host: localhost
