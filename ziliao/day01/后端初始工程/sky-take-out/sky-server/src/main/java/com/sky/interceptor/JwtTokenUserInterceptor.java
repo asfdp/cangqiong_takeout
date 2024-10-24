@@ -45,11 +45,10 @@ public class JwtTokenUserInterceptor implements HandlerInterceptor {
 
         //2、校验令牌
         try {
-            log.info("jwt校验:{}", authentication);
+            log.info("jwt用户端校验:{}", authentication);
             Claims claims = JwtUtil.parseJWT(jwtProperties.getUserSecretKey(), authentication);
-            log.info("11111");
-            Long userId = (Long) claims.get(JwtClaimsConstant.USER_ID);
-            //Long userId = Long.valueOf(claims.get(JwtClaimsConstant.USER_ID).toString());
+            //Long userId = (Long) claims.get(JwtClaimsConstant.USER_ID);
+            Long userId = Long.valueOf(claims.get(JwtClaimsConstant.USER_ID).toString());
             log.info("当前用户id:{}", userId);
             BaseContext.setCurrentId(userId);//将empId传入threadlocal中进行传递
             //3、通过，放行
