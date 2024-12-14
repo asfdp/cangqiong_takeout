@@ -2,6 +2,52 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.mapper.ShoppingCartMapper">
+    <select id="getNumber" resultType="integer">
+        <!-- 查询 shopping_cart 表中符合条件的记录 -->
+        SELECT number  FROM shopping_cart
+        <where>
+            <if test="userId != null">
+             and user_id=#{userId}
+            </if>
+            <if test="dishId != null">
+             and dish_id = #{dishId}
+            </if>
+            <if test="dishFlavor != null">
+             and dish_flavor = #{dishFlavor}
+            </if>
+        </where>
+    </select>
+    <update id="updateSub" parameterType="shoppingCart">
+            <!-- 如果 number 字段大于 1，则更新 number 字段 -->
+            UPDATE shopping_cart
+            SET number = #{number}
+        <where>
+            <if test="userId != null">
+                and user_id=#{userId}
+            </if>
+            <if test="dishId != null">
+                and dish_id = #{dishId}
+            </if>
+            <if test="dishFlavor != null">
+                and dish_flavor = #{dishFlavor}
+            </if>
+        </where>
+    </update>
+    <delete id="deleteSub">
+            <!-- 如果 number 字段等于 1，则删除该行记录 -->
+            DELETE FROM shopping_cart
+        <where>
+            <if test="userId != null">
+                and user_id=#{userId}
+            </if>
+            <if test="dishId != null">
+                and dish_id = #{dishId}
+            </if>
+            <if test="dishFlavor != null">
+                and dish_flavor = #{dishFlavor}
+            </if>
+        </where>
+    </delete>
     <select id="list" resultType="com.sky.entity.ShoppingCart">
         select * from shopping_cart
         <where>
@@ -23,4 +69,11 @@
         insert into shopping_cart (name, image, user_id, dish_id, setmeal_id, dish_flavor, number, amount, create_time) VALUES
                     (#{name},#{image},#{userId},#{dishId},#{setmealId},#{dishFlavor},#{number},#{amount},#{createTime})
     </insert>
+    <insert id="insertBatch" parameterType="list">
+        insert into shopping_cart (name, image, user_id, dish_id, setmeal_id, dish_flavor, number, amount,create_time) VALUES
+        <foreach collection="shoppingCartList" item="sc" separator=",">
+            (#{sc.name},#{sc.image},#{sc.userId},#{sc.dishId},#{sc.setmealId},#{sc.dishFlavor},#{sc.number},#{sc.amount},#{sc.createTime})
+        </foreach>
+    </insert>
+
 </mapper>

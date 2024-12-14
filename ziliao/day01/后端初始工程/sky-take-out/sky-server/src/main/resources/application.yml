@@ -67,8 +67,12 @@ aliyun:
     bucketName: ${aliyun.oss.bucketName}
     endpoint: ${aliyun.oss.endpoint}
 
-
-
+#店铺地址
+shop:
+  address: ${sky.shop.address}
+#百度地图ak
+baidu:
+  ak: ${sky.baidu.ak}
 
 
 

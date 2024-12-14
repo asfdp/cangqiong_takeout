@@ -1,7 +1,9 @@
 package com.sky.controller.user;
 
 
+import com.sky.context.BaseContext;
 import com.sky.dto.ShoppingCartDTO;
+import com.sky.entity.ShoppingCart;
 import com.sky.result.Result;
 import com.sky.service.ShoppingCartService;
 import io.swagger.annotations.Api;
@@ -9,10 +11,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Api(tags = "C端购物车相关接口")
 @Slf4j
@@ -32,6 +33,21 @@ public class shoppingCartController {
         return Result.success();
     }
 
+    @GetMapping("/list")
+    @ApiOperation("查看购物车内容")
+    public Result<List<ShoppingCart>> listByUserId() {
+        List<ShoppingCart> shoppingCarts = shoppingCartService.listByUserId();
+        return Result.success(shoppingCarts);
+    }
 
+    @PostMapping("/sub")
+    @ApiOperation("根据条件删除一条购物车记录")
+    public void deleteSub(@RequestBody ShoppingCartDTO shoppingCartDTO) {
+        shoppingCartService.deleteSub(shoppingCartDTO);
+    }
 
+    @DeleteMapping("/clean")
+    public void deleteAll() {
+        shoppingCartService.deleteAll();
+    }
 }

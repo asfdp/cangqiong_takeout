@@ -17,6 +17,10 @@ sky:
     password: 123456
     database: 0
 
+  shop:
+    address: 昆明市盘龙区北京路昆明广场
+  baidu:
+    ak: fCAPzPadvWQ3swZN61bT9wkBoGvYSstm
 #阿里云OSS配置（access key在环境变量中配置）
 aliyun:
   oss:
